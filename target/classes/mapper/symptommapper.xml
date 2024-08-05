@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.SymptomDao">
+    <select id="findBySearch" parameterType="map" resultType="com.example.entity.Symptom">
+        SELECT * FROM symptom
+        <where>
+            USER_ID = #{params.user_id}
+            <if test="params.searchTri != null and params.searchTri != ''">
+                AND (Triggers REGEXP CONCAT('(^|,)', REPLACE(#{params.searchTri}, ',', '(,|$)|(^|,)'), '(,|$)'))
+            </if>
+            <if test="params.searchPat != null and params.searchPat != ''">
+                AND (Pattern LIKE CONCAT('%', #{params.searchPat}, '%'))
+            </if>
+            <if test="params.begin_date != null and params.begin_date != '' and params.end_date != null and params.end_date != ''">
+                AND DATE(date) BETWEEN #{params.begin_date} AND #{params.end_date}
+            </if>
+        </where>
+        ORDER BY date
+    </select>
+
+    <select id="findCurve" parameterType="map" resultType="com.example.entity.Symptom">
+        SELECT
+        DATE(date) as date,
+        AVG(severity) as severity
+        FROM symptom
+        <where>
+            USER_ID = #{params.user_id}
+            <if test="params.searchTri != null and params.searchTri != ''">
+                AND (Triggers REGEXP CONCAT('(^|,)', REPLACE(#{params.searchTri}, ',', '(,|$)|(^|,)'), '(,|$)'))
+            </if>
+            <if test="params.searchPat != null and params.searchPat != ''">
+                AND (Pattern LIKE CONCAT('%', #{params.searchPat}, '%'))
+            </if>
+            <if test="params.begin_date != null and params.begin_date != '' and params.end_date != null and params.end_date != ''">
+                AND DATE(date) BETWEEN #{params.begin_date} AND #{params.end_date}
+            </if>
+        </where>
+        GROUP BY DATE(date)
+        ORDER BY DATE(date)
+    </select>
+
+    <select id="findAll" resultType="com.example.entity.Symptom">
+        select * from symptom
+        <where>
+            <if test="params !=null and params.user_id != null and params.user_id != ''">
+            and USER_ID = #{params.user_id}
+            </if>
+        </where>
+    </select>
+</mapper>
