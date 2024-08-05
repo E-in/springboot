@@ -20,6 +20,8 @@ public class User {
     @Column(name = "phone")
     private String phone;
 
+    @Column(name = "profile")
+    private String profile;
     @Transient
     private String token;
 
@@ -69,6 +71,14 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getProfile() {
+        return profile;
+    }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
     }
 
     public String getToken() {

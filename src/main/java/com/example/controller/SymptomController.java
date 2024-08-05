@@ -8,7 +8,8 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @CrossOrigin
 @RestController
@@ -19,6 +20,7 @@ public class SymptomController {
 
     @PostMapping
     public Result add(@RequestBody Symptom symptom){
+
         if(symptom.getId() == null){
             symptomservice.add(symptom);
         }else{
@@ -43,5 +45,27 @@ public class SymptomController {
         symptomservice.delete(id);
         return Result.success();
     }
+
+    @GetMapping("/echarts/getchat")
+    public Result getDate(Params params){
+        List<Symptom> list = symptomservice.findCurve(params);
+        List<String>  xAxis = new ArrayList<>();
+        List<Integer> yAxis = new ArrayList<>();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        for(Symptom symptom: list){
+            xAxis.add(dateFormat.format(symptom.getDate()));
+            yAxis.add(symptom.getSeverity());
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("xAxis",xAxis);
+        map.put("yAxis",yAxis);
+        return Result.success(map);
+    }
+    @GetMapping("/echarts/avg")
+    public Result getAvg(Params params){
+        List<Symptom> list = symptomservice.findAll(params);
+        return  Result.success(list);
+    }
+
 
 }

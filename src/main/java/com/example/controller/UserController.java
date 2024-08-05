@@ -19,11 +19,19 @@ public class UserController {
     @Resource
     private UserService userservice;
 
+    @PostMapping("/edit")
+    public Result edit(@RequestBody User user){
+        userservice.edit(user);
+        return Result.success();
+    }
+    @DeleteMapping("/{id}")
+    public Result delete(@PathVariable Integer id){
+        userservice.delete(id);
+        return Result.success();
+    }
     @PostMapping("/signup")
     public Result add(@RequestBody User user){
         userservice.add(user);
-
-
         return Result.success();
     }
 

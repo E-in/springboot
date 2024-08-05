@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.common.JwtTokenUtils;
+import com.example.dao.SymptomDao;
 import com.example.dao.UserDao;
 import com.example.entity.Params;
 import com.example.entity.Symptom;
@@ -10,6 +11,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.jdbc.support.CustomSQLErrorCodesTranslation;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -18,6 +20,9 @@ import java.util.List;
 public class UserService {
     @Resource
     private UserDao userdao;
+
+    @Resource
+    private SymptomDao symptomdao;
 
     public void add(User user){
         User newuser = userdao.findById(user.getId());
@@ -47,6 +52,12 @@ public class UserService {
     }
     public void edit(User user){
         userdao.updateByPrimaryKeySelective(user);
+    }
+    public void delete(Integer id){
+        userdao.deleteByPrimaryKey(id);
+        Example example = new Example (Symptom.class);
+        example.createCriteria().andEqualTo("user_id",id);
+        symptomdao.deleteByExample(example);
     }
     public User login(User user){
         if(user.getId() ==null||"".equals(user.getId())){

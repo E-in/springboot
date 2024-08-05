@@ -14,12 +14,15 @@ public class Symptom {
     @Column(name = "Date")
     private Date date;
 
+    @Column(name = "Pattern")
+    private  String pattern;
+
     @Column(name = "Severity")
-    private String severity;
+    private Integer severity;
     @Column(name = "Location")
     private String location;
-    @Column(name = "Description")
-    private String description;
+    @Column(name = "Triggers")
+    private String triggers;
 
     public Integer getId() {
         return id;
@@ -37,6 +40,14 @@ public class Symptom {
         this.user_id = user_id;
     }
 
+    public String getPattern() {
+        return pattern;
+    }
+
+    public void setPattern(String pattern) {
+        this.pattern = pattern;
+    }
+
     public Date getDate() {
         return date;
     }
@@ -45,11 +56,12 @@ public class Symptom {
         this.date = date;
     }
 
-    public String getSeverity() {
+
+    public Integer getSeverity() {
         return severity;
     }
 
-    public void setSeverity(String severity) {
+    public void setSeverity(Integer severity) {
         this.severity = severity;
     }
 
@@ -61,11 +73,9 @@ public class Symptom {
         this.location = location;
     }
 
-    public String getDescription() {
-        return description;
-    }
+    public String getTriggers() { return triggers; }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setTriggers(String triggers) {
+        this.triggers = triggers;
     }
 }
